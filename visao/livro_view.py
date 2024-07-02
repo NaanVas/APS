@@ -1,11 +1,11 @@
-from persistencia.livro_dao import LivroDAO
+from controle.livro_controller import LivroController
 
 class LivroView:
     def __init__(self):
-        self.livro_dao = LivroDAO()
+        self.livro_controller = LivroController()
 
     def listar_e_imprimir_livros(self):
-        livros = self.livro_dao.listar_livros()
+        livros = self.livro_controller.listar_livros()
         for livro in livros:
             self.imprimir_livro(livro)
 
@@ -17,7 +17,7 @@ class LivroView:
         print()
 
     def imprimir_livro_por_titulo(self, titulo):
-            livro = self.livro_dao.buscar_livro(titulo)
+            livro = self.livro_controller.buscar_livro(titulo)
             if livro:
                 self.imprimir_livro(livro)
             else:

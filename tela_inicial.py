@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tela_livro import TelaLivro
 from tela_autor import TelaAutor
+from tela_usuario import TelaUsuario
 
 class TelaInicial:
     def __init__(self, root):
@@ -70,7 +71,8 @@ class TelaInicial:
         pass
         
     def abrir_tela_usuario(self):
-        pass
+        self.root.withdraw()
+        self.janela_usuario = TelaUsuario(self.root, self.voltar_tela_inicial)
         
     def abrir_tela_funcionario(self):
         pass
