@@ -1,15 +1,20 @@
 from modelo.usuario import Usuario
+from modelo.funcionario import Funcionario
 from persistencia.usuario_dao import UsuarioDAO
 
 class UsuarioController:
     def __init__(self):
         self.usuario_dao = UsuarioDAO()
 
-    def cadastrar_usuario(self, cpf, nome, senha, tipo):
+    def cadastrar_usuario(self, cpf, nome, senha, tipo, salario=None):
         if self.usuario_dao.buscar_usuario(cpf) is not None:
             return f"Usuário com CPF '{cpf}' já cadastrado."
         
-        novo_usuario = Usuario(cpf, nome, senha, tipo)
+        if salario is not None:
+            novo_usuario = Funcionario(cpf, nome, senha, tipo, salario)
+        else:
+            novo_usuario = Usuario(cpf, nome, senha, tipo)
+            
         self.usuario_dao.salvar_usuario(novo_usuario)
         return None
     
