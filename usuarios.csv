@@ -1,4 +1,7 @@
-CPF,Nome,Senha,Tipo
-12345,1asdasdasd,1231231,admin
-123,asdasd,asdasd,admin
-1234,asdasd,asdasd,user
+CPF,Nome,Senha,Tipo,Salario
+123123,12312,asdasd,admin,123
+123,123123,1231231,user,
+12312312,123123,123123,user,
+321132,asdasda,123123123,user,
+1234,asdasda,asdasda,user,
+12384249614,naan,123kasbdkjas,admin,1500

@@ -46,11 +46,6 @@ class TelaInicial:
         self.botao_usuario = ttk.Button(self.frame_botoes, text="Usuário", style="Estilo.TButton", command=self.abrir_tela_usuario)
         self.botao_usuario.pack(pady=10)
 
-        self.botao_funcionario = ttk.Button(self.frame_botoes, text="Funcionário", style="Estilo.TButton", command=self.abrir_tela_funcionario)
-        self.botao_funcionario.pack(pady=10)
-
-        self.botao_administrador = ttk.Button(self.frame_botoes, text="Administrador", style="Estilo.TButton", command=self.abrir_tela_administrador)
-        self.botao_administrador.pack(pady=10)
 
     def abrir_tela_livro(self):
         self.root.withdraw()
@@ -74,11 +69,6 @@ class TelaInicial:
         self.root.withdraw()
         self.janela_usuario = TelaUsuario(self.root, self.voltar_tela_inicial)
         
-    def abrir_tela_funcionario(self):
-        pass
-        
-    def abrir_tela_administrador(self):
-        pass
 
 if __name__ == "__main__":
     root = tk.Tk()
