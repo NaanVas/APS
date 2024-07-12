@@ -1,20 +1,15 @@
 from modelo.usuario import Usuario
-from modelo.funcionario import Funcionario
 from persistencia.usuario_dao import UsuarioDAO
 
 class UsuarioController:
     def __init__(self):
         self.usuario_dao = UsuarioDAO()
 
-    def cadastrar_usuario(self, cpf, nome, senha, tipo, salario=None):
+    def cadastrar_usuario(self, cpf, nome, senha, data_nascimento):
         if self.usuario_dao.buscar_usuario(cpf) is not None:
             return f"Usuário com CPF '{cpf}' já cadastrado."
         
-        if salario is not None:
-            novo_usuario = Funcionario(cpf, nome, senha, tipo, salario)
-        else:
-            novo_usuario = Usuario(cpf, nome, senha, tipo)
-            
+        novo_usuario = Usuario(cpf, nome, senha, data_nascimento)
         self.usuario_dao.salvar_usuario(novo_usuario)
         return None
     
@@ -31,13 +26,3 @@ class UsuarioController:
     
     def listar_usuarios(self):
         return self.usuario_dao.listar_usuarios()
-    
-    def verifica_tipo(self, cpf):
-        usuario = self.usuario_dao.buscar_usuario(cpf)
-        if usuario:
-            if usuario.get_tipo() == 'admin':
-                return "admin"
-            else:
-                return "user"
-        else:
-            return None

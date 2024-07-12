@@ -1,9 +1,9 @@
 class Usuario:
-    def __init__(self, cpf, nome, senha, tipo):
+    def __init__(self, cpf, nome, senha, data_nascimento):
         self.cpf = cpf
         self.nome = nome
         self.senha = senha
-        self.tipo = tipo #'admin' administrador, 'user' usuario
+        self.data_nascimento = data_nascimento
 
     def get_cpf(self):
         return self.cpf
@@ -22,10 +22,9 @@ class Usuario:
     
     def set_senha(self, senha):
         self.senha = senha
+
+    def get_data_nascimento(self):
+        return self.data_nascimento
     
-    def get_tipo(self):
-        return self.tipo
-    
-    def is_adm(self):
-        return self.tipo == 'admin'
-        
+    def set_data_nascimento(self, data_nascimento):
+        self.data_nascimento = data_nascimento

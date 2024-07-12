@@ -21,17 +21,3 @@ class UsuarioView:
             self.imprimir_usuario(usuario)
         else:
             print(f"Usuário com CPF '{cpf}' não encontrado.")
-
-    def cadastrar_usuario(self, cpf, nome, senha, tipo):
-        resultado = self.usuario_controller.cadastrar_usuario(cpf, nome, senha, tipo)
-        if resultado:
-            print(resultado)
-        else:
-            print(f"Usuário '{nome}' cadastrado com sucesso.")
-
-    def excluir_usuario(self, cpf):
-        resultado = self.usuario_controller.excluir_usuario(cpf)
-        if resultado:
-            print(resultado)
-        else:
-            print(f"Usuário com CPF '{cpf}' excluído com sucesso.")

@@ -1,6 +1,5 @@
 import csv
 from modelo.usuario import Usuario
-from modelo.funcionario import Funcionario
 
 class UsuarioDAO:
     def __init__(self):
@@ -10,11 +9,8 @@ class UsuarioDAO:
         with open(self.arquivo_csv, mode='a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             if file.tell() == 0:
-                writer.writerow(['CPF', 'Nome', 'Senha', 'Tipo', 'Salario'])
-            if isinstance(usuario, Funcionario):
-                writer.writerow([usuario.get_cpf(), usuario.get_nome(), usuario.get_senha(), usuario.get_tipo(), usuario.get_salario()])
-            else:
-                writer.writerow([usuario.get_cpf(), usuario.get_nome(), usuario.get_senha(), usuario.get_tipo(), ''])
+                writer.writerow(['CPF', 'Nome', 'Senha', 'DataNascimento'])
+            writer.writerow([usuario.get_cpf(), usuario.get_nome(), usuario.get_senha(), usuario.get_data_nascimento()])
         print(f"Usuário '{usuario.get_nome()}' salvo com sucesso no arquivo CSV")
     
     def excluir_usuario(self, cpf):
@@ -28,10 +24,7 @@ class UsuarioDAO:
             reader = csv.DictReader(file)
             for row in reader:
                 if row['CPF'] == cpf:
-                    if row['Salario']:
-                        return Funcionario(row['CPF'], row['Nome'], row['Senha'], row['Tipo'], row['Salario'])
-                    else:
-                        return Usuario(row['CPF'], row['Nome'], row['Senha'], row['Tipo'])
+                    return Usuario(row['CPF'], row['Nome'], row['Senha'], row['DataNascimento'])
         return None
 
     def listar_usuarios(self):
@@ -39,20 +32,13 @@ class UsuarioDAO:
         with open(self.arquivo_csv, mode='r', newline='', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                if row['Salario']:
-                    usuario = Funcionario(row['CPF'], row['Nome'], row['Senha'], row['Tipo'], row['Salario'])
-                else:
-                    usuario = Usuario(row['CPF'], row['Nome'], row['Senha'], row['Tipo'])
-
+                usuario = Usuario(row['CPF'], row['Nome'], row['Senha'], row['DataNascimento'])
                 usuarios.append(usuario)
         return usuarios
     
     def _salvar_todos_usuarios(self, usuarios):
         with open(self.arquivo_csv, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow(['CPF', 'Nome', 'Senha', 'Tipo', 'Salario'])
+            writer.writerow(['CPF', 'Nome', 'Senha', 'DataNascimento'])
             for usuario in usuarios:
-                if isinstance(usuario,Funcionario):
-                    writer.writerow([usuario.get_cpf(), usuario.get_nome(), usuario.get_senha(), usuario.get_tipo(),usuario.get_salario()])
-                else:
-                    writer.writerow([usuario.get_cpf(), usuario.get_nome(), usuario.get_senha(), usuario.get_tipo(), ''])
+                writer.writerow([usuario.get_cpf(), usuario.get_nome(), usuario.get_senha(), usuario.get_data_nascimento()])
