@@ -17,7 +17,7 @@ class AutorDAO:
     def excluir_autor(self, nome):
         autores = self.listar_autores()
         autores_filtrados = [autor for autor in autores if autor.get_nome() != nome]
-        self.salvar_todos_autores(autores_filtrados)
+        self._salvar_todos_autores(autores_filtrados)
         print(f"Autor '{nome}' excluido com sucesso.")
 
     def buscar_autor(self, nome):
@@ -37,7 +37,7 @@ class AutorDAO:
                 autores.append(autor)
         return autores
 
-    def salvar_todos_autores(self, autores):
+    def _salvar_todos_autores(self, autores):
         with open(self.arquivo_csv_autores, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Nome', 'Nacionalidade', 'Data de Nascimento'])
