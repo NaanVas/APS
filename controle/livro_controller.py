@@ -2,6 +2,7 @@ from modelo.livro import Livro
 from modelo.autor import Autor
 from persistencia.livro_dao import LivroDAO  
 from persistencia.autor_dao import AutorDAO
+import datetime
 
 class LivroController:
     def __init__(self):
@@ -9,6 +10,15 @@ class LivroController:
         self.autor_dao = AutorDAO()
 
     def cadastrar_livro(self, titulo, autor_nome, editora, ano_publicacao):
+        try:
+            ano_publicacao = int(ano_publicacao)
+        except ValueError:
+            return "Ano de publicação inválido. Deve ser um número inteiro."
+        
+        ano_atual = datetime.datetime.now().year
+        if ano_publicacao > ano_atual:
+            return "O ano de publicação está errado."
+        
         livro_existente = self.livro_dao.buscar_livro(titulo)
         if livro_existente:
             return f"O livro '{livro_existente.get_titulo()} já está cadastrado"

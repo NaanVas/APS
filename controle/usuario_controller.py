@@ -1,15 +1,31 @@
 from modelo.usuario import Usuario
 from persistencia.usuario_dao import UsuarioDAO
+import datetime
 
 class UsuarioController:
     def __init__(self):
         self.usuario_dao = UsuarioDAO()
 
-    def cadastrar_usuario(self, cpf, nome, senha, data_nascimento):
-        if self.usuario_dao.buscar_usuario(cpf) is not None:
-            return f"Usuário com CPF '{cpf}' já cadastrado."
+    def cadastrar_usuario(self, cpf, nome, data_nascimento, senha):
+        try:
+            cpf_int = int(cpf.replace(".", "").replace("-", ""))
+        except ValueError:
+            return "CPF inválido. Deve conter apenas números."
         
-        novo_usuario = Usuario(cpf, nome, senha, data_nascimento)
+        try:
+            datetime.datetime.strptime(data_nascimento, "%d/%m/%Y")
+        except ValueError:
+            return "Data de nascimento inválida. Use o formato DD/MM/AAAA"
+        
+        ano_atual = datetime.datetime.now().year
+        data_nascimento_obj = datetime.datetime.strptime(data_nascimento, "%d/%m/%Y")
+        if data_nascimento_obj.year >= ano_atual:
+            return "Data de nascimento inválida. Use o formato DD/MM/AAAA"
+        
+        if self.usuario_dao.buscar_usuario(cpf_int) is not None:
+            return f"Usuário com CPF '{cpf_int}' já cadastrado."
+        
+        novo_usuario = Usuario(cpf_int, nome, senha, data_nascimento)
         self.usuario_dao.salvar_usuario(novo_usuario)
         return None
     

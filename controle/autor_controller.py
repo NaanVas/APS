@@ -1,11 +1,22 @@
 from modelo.autor import Autor
 from persistencia.autor_dao import AutorDAO
+import datetime
 
 class AutorController:
     def __init__(self):
         self.autor_dao = AutorDAO()
 
     def cadastrar_autor(self, nome, nacionalidade, data_nascimento):
+        try:
+            datetime.datetime.strptime(data_nascimento, "%d/%m/%Y")
+        except ValueError:
+            return "Data de nascimento inválida. Use o formato DD/MM/AAAA"
+        
+        ano_atual = datetime.datetime.now().year
+        data_nascimento_obj = datetime.datetime.strptime(data_nascimento, "%d/%m/%Y")
+        if data_nascimento_obj.year >= ano_atual:
+            return "Data de nascimento inválida. Use o formato DD/MM/AAAA"
+        
         autor = self.autor_dao.buscar_autor(nome)
         if autor:
             if not autor.get_nacionalidade():
