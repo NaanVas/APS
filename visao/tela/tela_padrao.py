@@ -16,7 +16,6 @@ class TelaPadrao:
 
         self.frame_botoes = tk.Frame(self.frame_central, bg="#E5E0D8")
 
-        # Configuração do estilo para os botões
         self.estilo_botoes = ttk.Style()
         self.estilo_botoes.configure("Estilo.TButton", font=("Montserrat", 10), foreground="#893F04", background="#893F04", borderwidth=0)
         self.estilo_botoes.map("Estilo.TButton", background=[("active", "#893F04")])

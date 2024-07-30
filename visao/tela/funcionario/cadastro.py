@@ -66,7 +66,7 @@ class TelaCadastroFuncionario(TelaPadrao):
             self.exibir_mensagem_sucesso("Funcionário cadastrado com sucesso.")
             self.limpar_campos()
         else:
-            self.exibir_mensagem_erro("Erro ao cadastrar funcionário.")
+            self.exibir_mensagem_erro(resultado)
 
     def limpar_campos(self):
         self.entry_cpf.delete(0, tk.END)

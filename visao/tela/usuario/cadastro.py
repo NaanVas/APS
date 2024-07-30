@@ -51,7 +51,7 @@ class TelaCadastroUsuario(TelaPadrao):
         data_nascimento = self.entry_data_nascimento.get()
 
         if cpf and nome and senha and data_nascimento:
-            resultado = self.usuario_controller.cadastrar_usuario(cpf, nome, senha, data_nascimento)
+            resultado = self.usuario_controller.cadastrar_usuario(cpf, nome, data_nascimento, senha)
             if resultado is None:
                 self.exibir_mensagem_sucesso(f"Usuário '{nome}' cadastrado com sucesso.")
                 self.limpar_campos()
