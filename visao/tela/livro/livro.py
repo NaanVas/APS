@@ -66,7 +66,7 @@ class TelaInicialLivro(TelaPadrao):
     def abrir_tela_listar(self):
         if self.janela_listar_aberta:
             self.janela_listar_aberta.fechar_tela()
-        self.janela_listar_aberta = TelaListarLivros(self.root, self.voltar_tela_livro)
+        self.janela_listar_aberta = TelaListarLivros(self.root)
 
     def abrir_tela_buscar(self):
         self.janela.withdraw()

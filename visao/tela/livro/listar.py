@@ -3,10 +3,9 @@ from visao.tela.tela_padrao import TelaPadrao
 from controle.livro_controller import LivroController
 
 class TelaListarLivros(TelaPadrao):
-    def __init__(self, root, voltar_callback):
+    def __init__(self, root):
         super().__init__(root, "Listagem de Livros")
         self.janela.focus_set()
-        self.voltar_callback = voltar_callback
         self.livro_controller = LivroController()
         self.text_area = None  
 
@@ -34,7 +33,6 @@ class TelaListarLivros(TelaPadrao):
     def fechar_tela(self):
         self.janela_listar_aberta = False
         self.janela.destroy()
-        self.voltar_callback()
 
     def listar_livros(self):
         return self.livro_controller.listar_livros()
