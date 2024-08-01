@@ -5,12 +5,14 @@ from visao.tela.livro.livro import TelaInicialLivro
 from visao.tela.autor.autor import TelaInicialAutor
 from visao.tela.usuario.usuario import TelaInicialUsuario
 from visao.tela.funcionario.funcionario import TelaInicialFuncionario
+from visao.tela.emprestimo.emprestimo_menu import TelaEmprestimoMenu
 
 class TelaInicial(TelaPadrao):
-    def __init__(self, root, voltar_callback, tipo_usuario):
+    def __init__(self, root, voltar_callback, tipo_usuario, cpf):
         super().__init__(root, "Sistema de Gerenciamento de Biblioteca")
         self.janela.focus_set()
         self.voltar_callback = voltar_callback
+        self.cpf = cpf
 
         self.label_boas_vindas = tk.Label(self.frame_central, text="Bem-vindo ao Sistema de Biblioteca", font=("Montserrat", 16, "bold"), fg="#893F04", bg="#E5E0D8")
         self.label_boas_vindas.grid(row=0, column=0, columnspan=2, pady=20)
@@ -66,7 +68,8 @@ class TelaInicial(TelaPadrao):
         self.janela_autor = TelaInicialAutor(self.root, self.voltar_tela_inicial, tipo_usuario)
 
     def abrir_tela_emprestimo(self):
-        pass
+        self.janela.withdraw()
+        self.janela_emprestimo = TelaEmprestimoMenu(self.root, self.voltar_tela_inicial, self.cpf)
 
     def abrir_tela_devolucoes(self):
         pass
