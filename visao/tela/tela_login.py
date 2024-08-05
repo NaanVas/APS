@@ -45,12 +45,12 @@ class TelaLogin(TelaPadrao):
 
         if (usuario and usuario.get_senha() == senha):
             self.janela.withdraw()
-            self.janela_inicial = TelaInicial(self.root, self.voltar_tela_login, 'user')
+            self.janela_inicial = TelaInicial(self.root, self.voltar_tela_login, 'user', cpf)
             self.limpar_campos()
         
         elif funcionario and funcionario.get_senha() == senha:
             self.janela.withdraw()
-            self.janela_inicial = TelaInicial(self.root, self.voltar_tela_login, 'funcionario')
+            self.janela_inicial = TelaInicial(self.root, self.voltar_tela_login, 'funcionario', cpf)
             self.limpar_campos()
 
         else:
