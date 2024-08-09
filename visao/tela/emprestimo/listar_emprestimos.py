@@ -4,11 +4,12 @@ from visao.tela.tela_padrao import TelaPadrao
 from controle.emprestimo_controller import EmprestimoController
 
 class TelaListarEmprestimos(TelaPadrao):
-    def __init__(self, root):
+    def __init__(self, root, cpf):
         super().__init__(root, "Listagem de Empréstimos")
         self.janela.focus_set()
         self.emprestimo_controller = EmprestimoController()
-        self.text_area = None  
+        self.text_area = None
+        self.cpf = cpf
 
         self.janela.geometry("600x450+800+150")
 
@@ -41,8 +42,16 @@ class TelaListarEmprestimos(TelaPadrao):
     def atualizar_lista(self):
         if self.janela_listar_aberta and self.text_area:
             self.text_area.delete('1.0', tk.END) 
+            emprestimos = []
 
-            emprestimos = self.listar_emprestimos()
+            if self.cpf == None:
+                emprestimos = self.listar_emprestimos()
+            
+            else:
+                todos_emprestimos = self.listar_emprestimos()
+                for emprestimo in todos_emprestimos:
+                    if emprestimo.get_cpf_usuario() == self.cpf:
+                        emprestimos.append(emprestimo)
 
             for emprestimo in emprestimos:
                 cpf_funcionario = f"CPF Funcionário: {emprestimo.get_cpf_funcionario()}\n"
