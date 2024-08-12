@@ -35,8 +35,10 @@ class TelaVerificarEmprestimo(TelaPadrao):
     def verificar_emprestimo(self):
         if self.janela_listar_aberta:
             self.janela_listar_aberta.fechar_tela()
-        self.janela_listar_aberta = TelaListarEmprestimos(self.root)
+        self.janela_listar_aberta = TelaListarEmprestimos(self.root, self.entry_cpf_usuario.get())
 
     def fechar_tela(self):
+        if self.janela_listar_aberta:
+            self.janela_listar_aberta.fechar_tela()
         self.janela.destroy()
         self.voltar_callback()
