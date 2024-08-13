@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from visao.tela.emprestimo.realizar_emprestimo import TelaRealizarEmprestimo
+from visao.tela.emprestimo.realizar_devolução import TelaRealizarDevolucao
 from visao.tela.emprestimo.verifica_emprestimo import TelaVerificarEmprestimo
 from visao.tela.emprestimo.listar_emprestimos import TelaListarEmprestimos
 from visao.tela.tela_padrao import TelaPadrao
@@ -54,7 +55,10 @@ class TelaEmprestimoMenu(TelaPadrao):
         self.janela_listar_aberta = TelaListarEmprestimos(self.root, None)
 
     def realizar_devolução(self):
-        pass
+        if self.janela_listar_aberta:
+            self.janela_listar_aberta.fechar_tela()
+        self.janela.withdraw()
+        self.janela_listar_aberta = TelaRealizarDevolucao(self.root, self.voltar_para_tela_emprestimo_menu,self.cpf)
 
     def voltar_para_tela_emprestimo_menu(self):
         self.janela.deiconify()
