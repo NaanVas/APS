@@ -21,14 +21,14 @@ class LivroController:
         
         livro_existente = self.livro_dao.buscar_livro(titulo)
         if livro_existente:
-            return f"O livro '{livro_existente.get_titulo()} já está cadastrado"
+            return f"O livro '{livro_existente.get_titulo()}' já está cadastrado"
         
         autor = self.autor_dao.buscar_autor(autor_nome)
         if not autor:
             novo_autor = Autor(autor_nome, '', '')
-            novo_autor = self.autor_dao.salvar_autor(novo_autor)
+            self.autor_dao.salvar_autor(novo_autor)
             print(f"Autor '{autor_nome}' não encontrado. Autor cadastrado com nome.")
-            autor = autor_nome
+            autor = novo_autor
 
         livro = Livro(titulo, autor, editora, ano_publicacao)
         self.livro_dao.salvar_livro(livro)
@@ -47,4 +47,3 @@ class LivroController:
     
     def listar_livros(self):
         return self.livro_dao.listar_livros()
-    
