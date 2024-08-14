@@ -9,8 +9,8 @@ class LivroDAO:
         with open(self.arquivo_csv, mode='a', newline='') as file:
             writer = csv.writer(file)
             if file.tell() == 0:
-                writer.writerow(['Titulo', 'Autor', 'Editora', 'Ano de Publicacao'])
-            writer.writerow([livro.get_titulo(), livro.get_autor(), livro.get_editora(), livro.get_ano_publicacao()])
+                writer.writerow(['Titulo', 'Autor', 'Editora', 'Ano de Publicacao', 'Emprestado'])
+            writer.writerow([livro.get_titulo(), livro.get_autor(), livro.get_editora(), livro.get_ano_publicacao(), livro.is_emprestado()])
             
         print(f"Livro '{livro.get_titulo()}' salvo com sucesso no arquivo CSV.")
 
@@ -18,14 +18,16 @@ class LivroDAO:
         livros = self.listar_livros()
         livros_filtrados = [livro for livro in livros if livro.get_titulo() != titulo]
         self._salvar_todos_livros(livros_filtrados)
-        print(f"Livro '{titulo}' excluido com sucesso.")
+        print(f"Livro '{titulo}' excluído com sucesso.")
 
     def buscar_livro(self, titulo):
         with open(self.arquivo_csv, mode='r', newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row['Titulo'] == titulo:
-                    return Livro(row['Titulo'], row['Autor'], row['Editora'], row['Ano de Publicacao'])
+                    livro = Livro(row['Titulo'], row['Autor'], row['Editora'], row['Ano de Publicacao'])
+                    livro.set_emprestado(row['Emprestado'].lower() == 'true')
+                    return livro
         return None
 
     def listar_livros(self):
@@ -34,12 +36,13 @@ class LivroDAO:
             reader = csv.DictReader(file)
             for row in reader:
                 livro = Livro(row['Titulo'], row['Autor'], row['Editora'], row['Ano de Publicacao'])
+                livro.set_emprestado(row['Emprestado'].lower() == 'true')
                 livros.append(livro)
         return livros
     
     def _salvar_todos_livros(self, livros):
         with open(self.arquivo_csv, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Titulo', 'Autor', 'Editora', 'Ano de Publicacao'])
+            writer.writerow(['Titulo', 'Autor', 'Editora', 'Ano de Publicacao', 'Emprestado'])
             for livro in livros:
-                writer.writerow([livro.get_titulo(), livro.get_autor(), livro.get_editora(), livro.get_ano_publicacao()])
+                writer.writerow([livro.get_titulo(), livro.get_autor(), livro.get_editora(), livro.get_ano_publicacao(), livro.is_emprestado()])
