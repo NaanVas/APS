@@ -77,4 +77,30 @@ class EmprestimoController:
     def listar_emprestimos(self):
         return self.emprestimo_dao.listar_emprestimos()
 
-    
+    def realizar_devolucao(self, cpf_usuario, titulo_livro):
+        emprestimos = self.emprestimo_dao.listar_emprestimos()
+        emprestimos_usuario = [e for e in emprestimos if e.get_cpf_usuario() == cpf_usuario]
+        emprestimos_usuario.sort(key=lambda e: e.get_data_emprestimo(), reverse=True)
+        
+        if not emprestimos_usuario:
+            return f"Empréstimo não encontrado para o usuário com CPF '{cpf_usuario}'."
+        
+        # Seleciona o empréstimo mais recente
+        emprestimo_mais_atual = emprestimos_usuario[0]
+        livros = self.emprestimo_dao.listar_livros(emprestimo_mais_atual)
+        livro = next((livro for livro in livros if livro == titulo_livro), None)
+        if livro:
+            livro = self.livro_controller.buscar_livro(livro)
+            data_devolucao = emprestimo_mais_atual.get_data_devolucao()
+            data_atual = datetime.now()
+            if data_atual <= data_devolucao:
+                self.emprestimo_dao.registrar_devolucao(emprestimo_mais_atual, livro, data_atual, None)
+                return None
+            else:
+                atraso = (data_atual - data_atual).days
+                multa = atraso * 1
+                self.emprestimo_dao.registrar_devolucao(emprestimo_mais_atual, livro, data_atual, multa)
+                return None
+        else:
+            return f"Livro '{titulo_livro}' nao encontrado no emprestimo"
+
