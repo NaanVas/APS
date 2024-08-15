@@ -6,6 +6,7 @@ class Livro:
         self.set_autor(autor)
         self.set_editora(editora)
         self.set_ano_publicacao(ano_publicacao)
+        self.emprestado = False
 
     def get_titulo(self):
         return self._titulo
@@ -30,3 +31,9 @@ class Livro:
 
     def set_ano_publicacao(self, novo_ano):
         self._ano_publicacao = novo_ano
+
+    def is_emprestado(self):
+        return self.emprestado
+
+    def set_emprestado(self, emprestado):
+        self.emprestado = emprestado
