@@ -1,11 +1,21 @@
-Titulo,Autor,Editora,Ano de Publicacao
-Como treinar o seu dragão,,Jorginho,2015
-fbfgghng,naan,asdasd,1234
-asdasdasdasd,asdasd,asdasd,12314
-asdasddg,asdasd,asdasd,1456
-asdasdasda,asdasdas,asdasda,123123
-naan,asjbas,ajsbas,123123
-123123,asdasdas,1231,123123
-É os D vida,D,Vida,2015
-Oloco,aksjda,abdh,abc
-Livro Duplicado,Autor Desconhecido,Editora XYZ,2000
+Titulo,Autor,Editora,Ano de Publicacao,Emprestado
+a,a,a,2012,False
+b,b,b,2013,False
+c,c,c,2016,False
+d,d,d,2016,False
+e,e,e,2015,False
+f,f,f,2016,False
+g,g,g,2012,False
+h,h,h,100,False
+i,i,i,1,False
+j,j,j,1,False
+k,k,k,1,False
+l,l,l,1,False
+m,m,m,1,False
+n,n,n,1,False
+o,o,o,1,False
+p,p,p,1,False
+q,q,q,1,False
+r,r,r,1,False
+s,s,s,1,False
+t,t,t,1,False
