@@ -31,10 +31,12 @@ class EmprestimoController:
         if len(emprestimo.get_livros()) >= 5:
             return f"O limite de 5 livros foi atingido."
         
-        # Busca o livro pelo título usando o método do LivroController
         livro = self.livro_controller.buscar_livro(titulo)
         if livro is None:
-            return f"Livro '{titulo}' não encontrado na biblioteca."
+            return f"O livro '{titulo}' não foi encontrado no sistema."
+        
+        if livro.is_emprestado():
+            return f"O livro '{livro.get_titulo()}' já está emprestado e não pode ser aprovado novamente."
 
         # Adiciona o livro
         self.emprestimo_dao.adicionar_livro(emprestimo, livro)
@@ -71,36 +73,36 @@ class EmprestimoController:
     def listar_livros(self, emprestimo):
         return self.emprestimo_dao.listar_livros(emprestimo)
     
-    def buscar_data_pendente(self, cpf):
-        return self.emprestimo_dao.buscar_data_pendente(cpf)
+    def buscar_emprestimo_pendente(self, cpf):
+        return self.emprestimo_dao.buscar_emprestimo_pendente(cpf)
 
     def listar_emprestimos(self):
         return self.emprestimo_dao.listar_emprestimos()
 
     def realizar_devolucao(self, cpf_usuario, titulo_livro):
+        emprestimo_usuario = []
         emprestimos = self.emprestimo_dao.listar_emprestimos()
-        emprestimos_usuario = [e for e in emprestimos if e.get_cpf_usuario() == cpf_usuario]
-        emprestimos_usuario.sort(key=lambda e: e.get_data_emprestimo(), reverse=True)
-        
-        if not emprestimos_usuario:
-            return f"Empréstimo não encontrado para o usuário com CPF '{cpf_usuario}'."
-        
-        # Seleciona o empréstimo mais recente
-        emprestimo_mais_atual = emprestimos_usuario[0]
-        livros = self.emprestimo_dao.listar_livros(emprestimo_mais_atual)
+        for emprestimo in emprestimos:
+            if emprestimo.get_cpf_usuario() == cpf_usuario:
+                emprestimo_usuario = emprestimo
+    
+        livros = self.emprestimo_dao.listar_livros(emprestimo_usuario)
         livro = next((livro for livro in livros if livro == titulo_livro), None)
         if livro:
             livro = self.livro_controller.buscar_livro(livro)
-            data_devolucao = emprestimo_mais_atual.get_data_devolucao()
-            data_atual = datetime.now()
-            if data_atual <= data_devolucao:
-                self.emprestimo_dao.registrar_devolucao(emprestimo_mais_atual, livro, data_atual, None)
-                return None
+            if livro.is_emprestado():
+                data_devolucao = emprestimo_usuario.get_data_devolucao()
+                data_atual = datetime.now()
+                if data_atual <= data_devolucao:
+                    self.emprestimo_dao.registrar_devolucao(emprestimo_usuario, livro, data_atual, None)
+                    return None
+                else:
+                    atraso = (data_atual - data_atual).days
+                    multa = atraso * 1
+                    self.emprestimo_dao.registrar_devolucao(emprestimo_usuario, livro, data_atual, multa)
+                    return None
             else:
-                atraso = (data_atual - data_atual).days
-                multa = atraso * 1
-                self.emprestimo_dao.registrar_devolucao(emprestimo_mais_atual, livro, data_atual, multa)
-                return None
+                return f"Livro {titulo_livro} nao esta emprestado"
         else:
             return f"Livro '{titulo_livro}' nao encontrado no emprestimo"
 

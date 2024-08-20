@@ -47,3 +47,6 @@ class LivroController:
     
     def listar_livros(self):
         return self.livro_dao.listar_livros()
+    
+    def _salvar_todos_livros(self, livros):
+        return self.livro_dao._salvar_todos_livros(livros)
