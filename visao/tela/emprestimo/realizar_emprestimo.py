@@ -41,7 +41,7 @@ class TelaRealizarEmprestimo(TelaPadrao):
                 if isinstance(emprestimo, str):
                     self.exibir_mensagem_erro(emprestimo)
                 else:
-                    resultado = self.emprestimo_controller.buscar_data_pendente(cpf_usuario)
+                    resultado = self.emprestimo_controller.buscar_emprestimo_pendente(cpf_usuario)
                     if resultado == None:
                         self.janela.withdraw()
                         self.entry_cpf_usuario.delete(0, tk.END)

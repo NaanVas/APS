@@ -40,6 +40,9 @@ class TelaEmprestimoIniciado(TelaPadrao):
         botao_cancelar = ttk.Button(self.frame_central, text="Cancelar Empréstimo", style="Estilo.TButton", command=self.fechar_tela)
         botao_cancelar.grid(row=5, column=0, columnspan=2, pady=10)
 
+        self.janela.protocol("WM_DELETE_WINDOW", self.fechar_tela)
+
+
     def adicionar_livro(self):
         titulo = self.entry_titulo_livro.get()
         if titulo:
