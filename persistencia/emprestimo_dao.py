@@ -93,7 +93,7 @@ class EmprestimoDAO:
         livros = self.livro_controller.listar_livros()
 
         for livro in livros:
-            if livro.get_titulo() == li.get_titulo():  # Localiza o livro específico
+            if livro.get_titulo() == li.get_titulo():
                 livro.set_emprestado(False)
 
         self.livro_controller._salvar_todos_livros(livros)
