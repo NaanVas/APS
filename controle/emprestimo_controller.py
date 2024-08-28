@@ -88,7 +88,7 @@ class EmprestimoController:
                     self.emprestimo_dao.registrar_devolucao(emprestimo_usuario, livro, data_atual, None)
                     return None
                 else:
-                    atraso = (data_atual - data_atual).days
+                    atraso = (data_atual - data_devolucao).days
                     multa = atraso * 1
                     self.emprestimo_dao.registrar_devolucao(emprestimo_usuario, livro, data_atual, multa)
                     return None
