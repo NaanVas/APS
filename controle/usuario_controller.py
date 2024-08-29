@@ -7,11 +7,7 @@ class UsuarioController:
         self.usuario_dao = UsuarioDAO()
 
     def cadastrar_usuario(self, cpf, nome, data_nascimento, senha):
-        try:
-            cpf_int = int(cpf.replace(".", "").replace("-", ""))
-        except ValueError:
-            return "CPF inválido. Deve conter apenas números."
-        
+      
         try:
             datetime.datetime.strptime(data_nascimento, "%d/%m/%Y")
         except ValueError:
@@ -22,10 +18,10 @@ class UsuarioController:
         if data_nascimento_obj.year >= ano_atual:
             return "Data de nascimento inválida. Use o formato DD/MM/AAAA"
         
-        if self.usuario_dao.buscar_usuario(cpf_int) is not None:
-            return f"Usuário com CPF '{cpf_int}' já cadastrado."
+        if self.usuario_dao.buscar_usuario(cpf) is not None:
+            return f"Usuário com CPF '{cpf}' já cadastrado."
         
-        novo_usuario = Usuario(cpf_int, nome, senha, data_nascimento)
+        novo_usuario = Usuario(cpf, nome, senha, data_nascimento)
         self.usuario_dao.salvar_usuario(novo_usuario)
         return None
     
