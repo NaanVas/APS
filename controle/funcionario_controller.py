@@ -8,11 +8,6 @@ class FuncionarioController:
 
     def cadastrar_funcionario(self, cpf, nome, data_nascimento, salario, senha):
         try:
-            cpf_int = int(cpf.replace(".", "").replace("-", ""))
-        except ValueError:
-            return "CPF inválido. Deve conter apenas números."
-
-        try:
             datetime.datetime.strptime(data_nascimento, "%d/%m/%Y")
         except ValueError:
             return "Data de nascimento inválida. Use o formato DD/MM/AAAA"
@@ -29,10 +24,10 @@ class FuncionarioController:
         except ValueError:
             return "Salário inválido. Deve ser um número."
         
-        if self.funcionario_dao.buscar_funcionario(cpf_int) is not None:
-            return f"Funcionário com CPF '{cpf_int}' já cadastrado."
+        if self.funcionario_dao.buscar_funcionario(cpf) is not None:
+            return f"Funcionário com CPF '{cpf}' já cadastrado."
         
-        novo_funcionario = Funcionario(cpf_int, nome, senha, data_nascimento, salario)
+        novo_funcionario = Funcionario(cpf, nome, senha, data_nascimento, salario)
         self.funcionario_dao.salvar_funcionario(novo_funcionario)
         return None
     
