@@ -47,17 +47,14 @@ class TelaInicial(TelaPadrao):
         self.botao_emprestimo = ttk.Button(self.frame_botoes, text="Empréstimo", style="Estilo.TButton", command=self.abrir_tela_emprestimo)
         self.botao_emprestimo.grid(row=2, column=0, pady=10, padx=10, sticky="ew")
 
-        self.botao_devolucoes = ttk.Button(self.frame_botoes, text="Devoluções", style="Estilo.TButton", command=self.abrir_tela_devolucoes)
-        self.botao_devolucoes.grid(row=3, column=0, pady=10, padx=10, sticky="ew")
-
         self.botao_usuario = ttk.Button(self.frame_botoes, text="Usuário", style="Estilo.TButton", command=self.abrir_tela_usuario)
-        self.botao_usuario.grid(row=4, column=0, pady=10, padx=10, sticky="ew")
+        self.botao_usuario.grid(row=3, column=0, pady=10, padx=10, sticky="ew")
 
         self.botao_funcionario = ttk.Button(self.frame_botoes, text="Funcionário", style="Estilo.TButton", command=self.abrir_tela_funcionario)
-        self.botao_funcionario.grid(row=5, column=0, pady=10, padx=10, sticky="ew")
+        self.botao_funcionario.grid(row=4, column=0, pady=10, padx=10, sticky="ew")
 
         botao_sair = ttk.Button(self.frame_botoes, text="Sair", style="Estilo.TButton", command=self.fechar_tela)
-        botao_sair.grid(row=6, column=0, pady=10, padx=10, sticky="ew")
+        botao_sair.grid(row=5, column=0, pady=10, padx=10, sticky="ew")
 
     def abrir_tela_livro(self, tipo_usuario):
         self.janela.withdraw()
