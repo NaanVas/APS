@@ -59,12 +59,14 @@ class TelaListarEmprestimos(TelaPadrao):
                 livros = f"Livros: {', '.join(emprestimo.get_livros())}\n"
                 data_emprestimo = f"Data de Empréstimo: {emprestimo.get_data_emprestimo().strftime('%Y-%m-%d %H:%M:%S') if emprestimo.get_data_emprestimo() else 'N/A'}\n"
                 data_devolucao = f"Data de Devolução: {emprestimo.get_data_devolucao().strftime('%Y-%m-%d') if emprestimo.get_data_devolucao() else 'N/A'}\n"
+                status = f"Status: {emprestimo.get_status()}\n"
 
                 self.text_area.insert(tk.END, cpf_funcionario)
                 self.text_area.insert(tk.END, cpf_usuario)
                 self.text_area.insert(tk.END, livros)
                 self.text_area.insert(tk.END, data_emprestimo)
                 self.text_area.insert(tk.END, data_devolucao)
+                self.text_area.insert(tk.END, status)
                 self.text_area.insert(tk.END, "\n")
 
                 self.text_area.tag_configure("negrito", font=("Montserrat", 10, "bold"))
