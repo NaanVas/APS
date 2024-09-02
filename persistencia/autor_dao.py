@@ -2,14 +2,22 @@ from modelo.autor import Autor
 from persistencia.dao_base import DAOBase
 
 class AutorDAO(DAOBase):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(AutorDAO, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self, arquivo_csv_autores='autores.csv'):
-        super().__init__(arquivo_csv_autores)
+        if not hasattr(self, '_initialized'):
+            super().__init__(arquivo_csv_autores)
+            self._initialized = True
 
     def salvar_autor(self, autor):
         with self._abrir_arquivo(modo='a') as file:
             self._escrever_cabecalho(file, ['Nome', 'Nacionalidade', 'Data de Nascimento'])
             self._escrever_linha(file, [autor.get_nome(), autor.get_nacionalidade(), autor.get_data_nascimento()])
-
         print(f'Autor {autor.get_nome()} salvo com sucesso no arquivo CSV.')
 
     def excluir_autor(self, nome):
