@@ -4,11 +4,20 @@ from controle.livro_controller import LivroController
 from persistencia.dao_base import DAOBase
 
 class EmprestimoDAO(DAOBase):
-    def __init__(self, arquivo='emprestimos.csv', arquivo_devolucoes='devolucoes.csv'):
-        super().__init__(arquivo)
-        self.arquivo_devolucoes = arquivo_devolucoes
-        self.livro_controller = LivroController()
+    _instance = None
 
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(EmprestimoDAO, cls).__new__(cls)
+        return cls._instance
+
+    def __init__(self, arquivo='emprestimos.csv', arquivo_devolucoes='devolucoes.csv'):
+        if not hasattr(self, '_initialized'):  # Evita a reinicialização
+            super().__init__(arquivo)
+            self.arquivo_devolucoes = arquivo_devolucoes
+            self.livro_controller = LivroController()
+            self._initialized = True
+            
     def criar_emprestimo(self, cpf_funcionario, cpf_usuario):
         return Emprestimo(cpf_funcionario, cpf_usuario)
 
