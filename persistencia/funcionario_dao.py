@@ -2,8 +2,17 @@ from persistencia.dao_base import DAOBase
 from modelo.funcionario import Funcionario
 
 class FuncionarioDAO(DAOBase):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(FuncionarioDAO, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
+
     def __init__(self):
-        super().__init__('funcionarios.csv')
+        if not hasattr(self, '_initialized'):
+            super().__init__('funcionarios.csv')
+            self._initialized = True
 
     def salvar_funcionario(self, funcionario):
         cabecalho = ['CPF', 'Nome', 'Senha', 'DataNascimento', 'Salario']
