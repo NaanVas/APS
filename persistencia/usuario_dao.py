@@ -2,8 +2,17 @@ from persistencia.dao_base import DAOBase
 from modelo.usuario import Usuario
 
 class UsuarioDAO(DAOBase):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(UsuarioDAO, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
+
     def __init__(self):
-        super().__init__("usuarios.csv")
+        if not hasattr(self, '_initialized'):
+            super().__init__("usuarios.csv")
+            self._initialized = True
 
     def salvar_usuario(self, usuario):
         cabecalho = ['CPF', 'Nome', 'Senha', 'DataNascimento']
