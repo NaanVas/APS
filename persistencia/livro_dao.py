@@ -2,8 +2,17 @@ from persistencia.dao_base import DAOBase
 from modelo.livro import Livro
 
 class LivroDAO(DAOBase):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(LivroDAO, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self):
-        super().__init__('livros.csv')
+        if not hasattr(self, '_initialized'):
+            super().__init__('livros.csv')
+            self._initialized = True
 
     def salvar_livro(self, livro):
         cabecalho = ['Titulo', 'Autor', 'Editora', 'Ano de Publicacao', 'Emprestado']
