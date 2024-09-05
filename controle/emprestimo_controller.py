@@ -3,13 +3,18 @@ from controle.funcionario_controller import FuncionarioController
 from persistencia.emprestimo_dao import EmprestimoDAO
 from controle.usuario_controller import UsuarioController
 from controle.livro_controller import LivroController
+from controle.Strategy.emprestimo_strategy import EmprestimoStrategy
 
 class EmprestimoController:
-    def __init__(self):
+    def __init__(self, strategy: EmprestimoStrategy):
         self.emprestimo_dao = EmprestimoDAO()
         self.usuario_controller = UsuarioController()
         self.funcionario_controller = FuncionarioController()
         self.livro_controller = LivroController()
+        self.strategy = strategy
+
+    def set_strategy(self, strategy: EmprestimoStrategy):
+        self.strategy = strategy
 
     def iniciar_emprestimo(self, cpf_funcionario, cpf_usuario):
 
@@ -25,8 +30,8 @@ class EmprestimoController:
             if livro.get_titulo() == titulo:
                 return f"O livro '{titulo}' já foi adicionado ao empréstimo."
         
-        if len(emprestimo.get_livros()) >= 5:
-            return f"O limite de 5 livros foi atingido."
+        if len(emprestimo.get_livros()) >= self.strategy.verificar_limite_livros():
+            return f"O limite de {self.strategy.verificar_limite_livros()} livros foi atingido."
         
         livro = self.livro_controller.buscar_livro(titulo)
         if livro is None:
@@ -56,7 +61,7 @@ class EmprestimoController:
             return f"Não há livros no empréstimo para aprovar."
 
         emprestimo.set_data_emprestimo(datetime.now())
-        emprestimo.set_data_devolucao(emprestimo.get_data_emprestimo() + timedelta(days=7))
+        emprestimo.set_data_devolucao(emprestimo.get_data_emprestimo() + self.strategy.calcular_periodo_emprestimo())
 
         self.emprestimo_dao.aprovar_emprestimo(emprestimo)
         return None
@@ -89,7 +94,7 @@ class EmprestimoController:
                     return None
                 else:
                     atraso = (data_atual - data_devolucao).days
-                    multa = atraso * 1
+                    multa = self.strategy.calcular_multa(atraso)
                     self.emprestimo_dao.registrar_devolucao(emprestimo_usuario, livro, data_atual, multa)
                     return None
             else:
