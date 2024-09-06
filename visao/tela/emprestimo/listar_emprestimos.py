@@ -6,12 +6,13 @@ from controle.Strategy.emprestimo_padrao_strategy import EmprestimoPadraoStrateg
 
 
 class TelaListarEmprestimos(TelaPadrao):
-    def __init__(self, root, cpf):
+    def __init__(self, root, tipo_usuario, cpf):
         super().__init__(root, "Listagem de Empréstimos")
         self.janela.focus_set()
         self.emprestimo_controller = EmprestimoController(EmprestimoPadraoStrategy())
         self.text_area = None
         self.cpf = cpf
+        self.tipo_usuario = tipo_usuario
 
         self.janela.geometry("600x450+800+150")
 
@@ -46,7 +47,7 @@ class TelaListarEmprestimos(TelaPadrao):
             self.text_area.delete('1.0', tk.END) 
             emprestimos = []
 
-            if self.cpf == None:
+            if self.tipo_usuario == 'funcionario':
                 emprestimos = self.listar_emprestimos()
             
             else:

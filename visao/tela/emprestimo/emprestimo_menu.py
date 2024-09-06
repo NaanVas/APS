@@ -7,13 +7,13 @@ from visao.tela.emprestimo.listar_emprestimos import TelaListarEmprestimos
 from visao.tela.tela_padrao import TelaPadrao
 
 class TelaEmprestimoMenu(TelaPadrao):
-    def __init__(self, root, voltar_callback, cpf):
+    def __init__(self, root, voltar_callback, tipo_usuario, cpf):
         super().__init__(root, "Menu de Empréstimo")
         self.janela.focus_set()
         self.voltar_callback = voltar_callback
         self.cpf = cpf
+        self.tipo_usuario = tipo_usuario
         self.janela_listar_aberta = None
-
 
         self.frame_botoes.grid(row=1, column=0, columnspan=2, pady=20)
 
@@ -52,7 +52,7 @@ class TelaEmprestimoMenu(TelaPadrao):
     def listar_emprestimos(self):
         if self.janela_listar_aberta:
             self.janela_listar_aberta.fechar_tela()
-        self.janela_listar_aberta = TelaListarEmprestimos(self.root, None)
+        self.janela_listar_aberta = TelaListarEmprestimos(self.root, self.tipo_usuario, self.cpf)
 
     def realizar_devolução(self):
         if self.janela_listar_aberta:
