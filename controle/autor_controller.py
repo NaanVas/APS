@@ -28,7 +28,6 @@ class AutorController:
             self.autor_dao.excluir_autor(nome)
             self.autor_dao.salvar_autor(autor)
 
-            print(f"Autor '{autor.get_nome()}' já existe. Dados atualizados.")
             return None
         else:
             novo_autor = Autor(nome, nacionalidade, data_nascimento) 

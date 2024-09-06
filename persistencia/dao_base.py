@@ -1,12 +1,20 @@
 import csv
 
 class DAOBase:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(DAOBase, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self, arquivo):
-        self.arquivo = arquivo
-        self.arquivo_original = arquivo
+        if not hasattr(self, '_initialized'):
+            self.arquivo = arquivo
+            self.arquivo_original = arquivo
+            self._initialized = True
 
     def _abrir_arquivo(self, modo='r'):
-
         return open(self.arquivo, mode=modo, newline='', encoding='utf-8')
 
     def _escrever_cabecalho(self, file, cabecalho):

@@ -4,19 +4,10 @@ from persistencia.livro_dao import LivroDAO
 from persistencia.dao_base import DAOBase
 
 class EmprestimoDAO(DAOBase):
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(EmprestimoDAO, cls).__new__(cls)
-        return cls._instance
-
     def __init__(self, arquivo='emprestimos.csv', arquivo_devolucoes='devolucoes.csv'):
-        if not hasattr(self, '_initialized'):
-            super().__init__(arquivo)
-            self.arquivo_devolucoes = arquivo_devolucoes
-            self.livro_dao = LivroDAO()
-            self._initialized = True
+        super().__init__(arquivo)
+        self.arquivo_devolucoes = arquivo_devolucoes
+        self.livro_dao = LivroDAO()
             
     def criar_emprestimo(self, cpf_funcionario, cpf_usuario):
         return Emprestimo(cpf_funcionario, cpf_usuario)

@@ -2,17 +2,8 @@ from persistencia.dao_base import DAOBase
 from modelo.livro import Livro
 
 class LivroDAO(DAOBase):
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super(LivroDAO, cls).__new__(cls)
-        return cls._instance
-
     def __init__(self):
-        if not hasattr(self, '_initialized'):
-            super().__init__('livros.csv')
-            self._initialized = True
+        super().__init__('livros.csv')
 
     def salvar_livro(self, livro):
         cabecalho = ['Titulo', 'Autor', 'Editora', 'Ano de Publicacao', 'Emprestado']
@@ -25,13 +16,11 @@ class LivroDAO(DAOBase):
                 livro.get_ano_publicacao(), 
                 livro.is_emprestado()
             ])
-        print(f"Livro '{livro.get_titulo()}' salvo com sucesso no arquivo CSV.")
 
     def excluir_livro(self, titulo):
         livros = self.listar_livros()
         livros_filtrados = [livro for livro in livros if livro.get_titulo() != titulo]
         self._salvar_todos_livros(livros_filtrados)
-        print(f"Livro '{titulo}' excluído com sucesso.")
 
     def buscar_livro(self, titulo):
         livros = self._ler_arquivo()

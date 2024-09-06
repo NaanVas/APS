@@ -2,17 +2,8 @@ from persistencia.dao_base import DAOBase
 from modelo.usuario import Usuario
 
 class UsuarioDAO(DAOBase):
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super(UsuarioDAO, cls).__new__(cls, *args, **kwargs)
-        return cls._instance
-
     def __init__(self):
-        if not hasattr(self, '_initialized'):
-            super().__init__("usuarios.csv")
-            self._initialized = True
+        super().__init__('usuarios.csv')
 
     def salvar_usuario(self, usuario):
         cabecalho = ['CPF', 'Nome', 'Senha', 'DataNascimento']
@@ -24,13 +15,11 @@ class UsuarioDAO(DAOBase):
                 usuario.get_senha(), 
                 usuario.get_data_nascimento()
             ])
-        print(f"Usuário '{usuario.get_nome()}' salvo com sucesso no arquivo CSV")
     
     def excluir_usuario(self, cpf):
         usuarios = self.listar_usuarios()
         usuarios_filtrados = [u for u in usuarios if u.get_cpf() != cpf]
         self._salvar_todos_usuarios(usuarios_filtrados)
-        print(f"Usuário com CPF '{cpf}' excluído com sucesso")
     
     def buscar_usuario(self, cpf):
         usuarios = self._ler_arquivo()

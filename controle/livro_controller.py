@@ -27,7 +27,6 @@ class LivroController:
         if not autor:
             novo_autor = Autor(autor_nome, '', '')
             self.autor_dao.salvar_autor(novo_autor)
-            print(f"Autor '{autor_nome}' não encontrado. Autor cadastrado com nome.")
             autor = novo_autor
 
         livro = Livro(titulo, autor, editora, ano_publicacao)

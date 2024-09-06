@@ -2,17 +2,8 @@ from persistencia.dao_base import DAOBase
 from modelo.funcionario import Funcionario
 
 class FuncionarioDAO(DAOBase):
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super(FuncionarioDAO, cls).__new__(cls, *args, **kwargs)
-        return cls._instance
-
     def __init__(self):
-        if not hasattr(self, '_initialized'):
-            super().__init__('funcionarios.csv')
-            self._initialized = True
+        super().__init__('funcionarios.csv')
 
     def salvar_funcionario(self, funcionario):
         cabecalho = ['CPF', 'Nome', 'Senha', 'DataNascimento', 'Salario']
@@ -25,13 +16,11 @@ class FuncionarioDAO(DAOBase):
                 funcionario.get_data_nascimento(), 
                 funcionario.get_salario()
             ])
-        print(f"Funcionário '{funcionario.get_nome()}' salvo com sucesso no arquivo CSV.")
     
     def excluir_funcionario(self, cpf):
         funcionarios = self.listar_funcionarios()
         funcionarios_filtrados = [f for f in funcionarios if f.get_cpf() != cpf]
         self._salvar_todos_funcionarios(funcionarios_filtrados)
-        print(f"Funcionário com CPF '{cpf}' excluído com sucesso.")
     
     def buscar_funcionario(self, cpf):
         funcionarios = self._ler_arquivo()
