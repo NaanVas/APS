@@ -1,6 +1,6 @@
 Titulo,Autor,Editora,Ano de Publicacao,Emprestado
-a,a,a,2012,False
-b,b,b,2013,False
+a,a,a,2012,True
+b,b,b,2013,True
 c,c,c,2016,False
 d,d,d,2016,False
 e,e,e,2015,False

@@ -58,7 +58,7 @@ class TelaListarEmprestimos(TelaPadrao):
             for emprestimo in emprestimos:
                 cpf_funcionario = f"CPF Funcionário: {emprestimo.get_cpf_funcionario()}\n"
                 cpf_usuario = f"CPF Usuário: {emprestimo.get_cpf_usuario()}\n"
-                livros = f"Livros: {', '.join(emprestimo.get_livros())}\n"
+                livros = f"Livros: {', '.join(livro.get_titulo() for livro in emprestimo.get_livros())}\n"
                 data_emprestimo = f"Data de Empréstimo: {emprestimo.get_data_emprestimo().strftime('%Y-%m-%d %H:%M:%S') if emprestimo.get_data_emprestimo() else 'N/A'}\n"
                 data_devolucao = f"Data de Devolução: {emprestimo.get_data_devolucao().strftime('%Y-%m-%d') if emprestimo.get_data_devolucao() else 'N/A'}\n"
                 status = f"Status: {emprestimo.get_status()}\n"

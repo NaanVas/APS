@@ -1,21 +1,21 @@
 from datetime import datetime
 from modelo.emprestimo import Emprestimo
-from controle.livro_controller import LivroController
+from persistencia.livro_dao import LivroDAO
 from persistencia.dao_base import DAOBase
 
 class EmprestimoDAO(DAOBase):
     _instance = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls):
         if cls._instance is None:
             cls._instance = super(EmprestimoDAO, cls).__new__(cls)
         return cls._instance
 
     def __init__(self, arquivo='emprestimos.csv', arquivo_devolucoes='devolucoes.csv'):
-        if not hasattr(self, '_initialized'):  # Evita a reinicialização
+        if not hasattr(self, '_initialized'):
             super().__init__(arquivo)
             self.arquivo_devolucoes = arquivo_devolucoes
-            self.livro_controller = LivroController()
+            self.livro_dao = LivroDAO()
             self._initialized = True
             
     def criar_emprestimo(self, cpf_funcionario, cpf_usuario):
@@ -34,13 +34,9 @@ class EmprestimoDAO(DAOBase):
     def listar_livros(self, emprestimo):
         return emprestimo.get_livros()
 
-    def aprovar_emprestimo(self, emprestimo):
-        livros = self.livro_controller.listar_livros()
-        for livro in emprestimo.get_livros():
-            for l in livros:
-                if livro.get_titulo() == l.get_titulo():
-                    l.set_emprestado(True)
-        self.livro_controller._salvar_todos_livros(livros)
+    def salvar_emprestimo(self, emprestimo, livros):
+        
+        self.livro_dao._salvar_todos_livros(livros)
 
         data_emprestimo = (emprestimo.get_data_emprestimo().strftime('%Y-%m-%d %H:%M:%S')
                            if emprestimo.get_data_emprestimo() else '')
@@ -65,12 +61,16 @@ class EmprestimoDAO(DAOBase):
         for row in self._ler_arquivo():
             cpf_funcionario = row['CPF Funcionário']
             cpf_usuario = row['CPF Usuário']
-            livros = row['Livros']
+            livros_titulos = row['Livros']
             data_emprestimo = row['Data Empréstimo']
             data_devolucao = row['Data Devolução']
             status = row['Status']
 
-            livros_lista = livros.split(', ') if livros else []
+            livros_lista = []
+            for titulo in livros_titulos.split(', '):
+                livro = self.livro_dao.buscar_livro(titulo)
+                if livro:
+                    livros_lista.append(livro)
 
             emprestimo = Emprestimo(cpf_funcionario, cpf_usuario, status)
             emprestimo.set_livros(livros_lista)
@@ -84,34 +84,13 @@ class EmprestimoDAO(DAOBase):
 
     def buscar_emprestimo_pendente(self, cpf):
         emprestimos = self.listar_emprestimos()
-        
+
         for emprestimo in emprestimos:
             if emprestimo.get_cpf_usuario() == cpf and emprestimo.get_status() == True:
                 return f"O usuário '{cpf}' possui empréstimos em aberto."
         return None
     
-    def registrar_devolucao(self, emprestimo, li, data_devolvida, multa):
-        livros = self.livro_controller.listar_livros()
-
-        for livro in livros:
-            if livro.get_titulo() == li.get_titulo():
-                livro.set_emprestado(False)
-
-        self.livro_controller._salvar_todos_livros(livros)
-        todos_livros = []
-        for livro in emprestimo.get_livros():
-            for l in livros:
-                if livro == l.get_titulo():
-                    todos_livros.append(l)
-
-        todos_devolvidos = all(not livro.is_emprestado() for livro in todos_livros)
-        if todos_devolvidos:
-            emprestimos = self.listar_emprestimos()
-            for emprest in emprestimos:
-                if emprest.get_cpf_usuario() == emprestimo.get_cpf_usuario():
-                    emprest.set_status(False)
-            self._salvar_todos_emprestimos(emprestimos)
-        
+    def registrar_devolucao(self, emprestimo, livro, data_devolvida, multa):
         self.set_arquivo(self.arquivo_devolucoes)
 
         with self._abrir_arquivo(modo='a') as file:
@@ -121,7 +100,7 @@ class EmprestimoDAO(DAOBase):
             self._escrever_linha(file, [
                 emprestimo.get_cpf_funcionario(),
                 emprestimo.get_cpf_usuario(),
-                li.get_titulo(),
+                livro.get_titulo(),
                 emprestimo.get_data_devolucao().strftime('%Y-%m-%d') if emprestimo.get_data_devolucao() else '',
                 data_devolvida.strftime('%Y-%m-%d'),
                 multa if multa is not None else ''
@@ -137,7 +116,7 @@ class EmprestimoDAO(DAOBase):
             [
                 emprestimo.get_cpf_funcionario(),
                 emprestimo.get_cpf_usuario(),
-                ', '.join([livro for livro in emprestimo.get_livros()]),
+                ', '.join([livro.get_titulo() for livro in emprestimo.get_livros()]),
                 emprestimo.get_data_emprestimo().strftime('%Y-%m-%d %H:%M:%S') if emprestimo.get_data_emprestimo() else '',
                 emprestimo.get_data_devolucao().strftime('%Y-%m-%d') if emprestimo.get_data_devolucao() else '',
                 'True' if emprestimo.get_status() else 'False'

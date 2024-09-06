@@ -24,7 +24,7 @@ class Emprestimo:
 
     def set_livros(self, livros):
         self.livros = livros
-
+        
     def get_data_emprestimo(self):
         return self.data_emprestimo
 
@@ -38,7 +38,7 @@ class Emprestimo:
         self.data_devolucao = data_devolucao
 
     def get_status(self):
-        return self.status
+        return  self.status.lower() == 'true' if isinstance(self.status, str) else self.status
 
     def set_status(self, status):
         self.status = status
