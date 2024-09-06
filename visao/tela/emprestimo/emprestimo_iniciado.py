@@ -3,6 +3,9 @@ from tkinter import ttk
 from visao.tela.tela_padrao import TelaPadrao
 from visao.tela.emprestimo.listar_livros_emprestimo import TelaListarLivrosEmprestimo
 from controle.emprestimo_controller import EmprestimoController
+from controle.Strategy.emprestimo_padrao_strategy import EmprestimoPadraoStrategy
+from controle.Strategy.emprestimo_funcionario_strategy import EmprestimoFuncionarioStrategy
+
 
 class TelaEmprestimoIniciado(TelaPadrao):
     def __init__(self, root, voltar_callback, cpf_funcionario, cpf_usuario, emprestimo):
@@ -10,7 +13,7 @@ class TelaEmprestimoIniciado(TelaPadrao):
         self.janela.focus_set()
         self.emprestimo = emprestimo
         self.voltar_callback = voltar_callback
-        self.emprestimo_controller = EmprestimoController()
+        self.emprestimo_controller = EmprestimoController(EmprestimoPadraoStrategy())
         self.janela_listar_aberta = None
         self.cpf_funcionario = cpf_funcionario
         self.cpf_usuario = cpf_usuario
@@ -25,22 +28,40 @@ class TelaEmprestimoIniciado(TelaPadrao):
         self.label_mensagem = tk.Label(self.frame_central, text="", font=("Montserrat", 8), fg="#893F04", bg="#E5E0D8")
         self.label_mensagem.grid(row=2, column=0, columnspan=2, pady=10)
 
+        self.strategy_var = tk.IntVar(value=0)
+        checkbox_strategy = tk.Checkbutton(
+            self.frame_central, 
+            text="Usar Estratégia de Funcionário", 
+            variable=self.strategy_var, 
+            font=("Montserrat", 10), 
+            fg="#893F04", 
+            bg="#E5E0D8",
+            command=self.alterar_estrategia
+        )
+        checkbox_strategy.grid(row=3, column=0, columnspan=2, pady=10)
+
         botao_adicionar = ttk.Button(self.frame_central, text="Adicionar Livro", style="Estilo.TButton", command=self.adicionar_livro)
-        botao_adicionar.grid(row=3, column=0, pady=10)
+        botao_adicionar.grid(row=4, column=0, pady=10)
 
         botao_remover = ttk.Button(self.frame_central, text="Remover Livro", style="Estilo.TButton", command=self.remover_livro)
-        botao_remover.grid(row=3, column=1, pady=10, padx=10, sticky="ew")
+        botao_remover.grid(row=4, column=1, pady=10, padx=10, sticky="ew")
 
         botao_listar = ttk.Button(self.frame_central, text="Listar Livros", style="Estilo.TButton", command=self.listar_livros)
-        botao_listar.grid(row=4, column=0, pady=10)
+        botao_listar.grid(row=5, column=0, pady=10)
 
         botao_aprovar = ttk.Button(self.frame_central, text="Aprovar Empréstimo", style="Estilo.TButton", command=self.aprovar_emprestimo)
-        botao_aprovar.grid(row=4, column=1, pady=10, padx=10, sticky="ew")
+        botao_aprovar.grid(row=5, column=1, pady=10, padx=10, sticky="ew")
 
         botao_cancelar = ttk.Button(self.frame_central, text="Cancelar Empréstimo", style="Estilo.TButton", command=self.fechar_tela)
-        botao_cancelar.grid(row=5, column=0, columnspan=2, pady=10)
+        botao_cancelar.grid(row=6, column=0, columnspan=2, pady=10)
 
         self.janela.protocol("WM_DELETE_WINDOW", self.fechar_tela)
+
+    def alterar_estrategia(self):
+        if self.strategy_var.get() == 1:
+            self.emprestimo_controller.set_strategy(EmprestimoFuncionarioStrategy())
+        else: 
+            self.emprestimo_controller.set_strategy(EmprestimoPadraoStrategy())
 
 
     def adicionar_livro(self):

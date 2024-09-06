@@ -2,12 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 from visao.tela.tela_padrao import TelaPadrao
 from controle.emprestimo_controller import EmprestimoController
+from controle.Strategy.emprestimo_padrao_strategy import EmprestimoPadraoStrategy
+
 
 class TelaListarEmprestimos(TelaPadrao):
     def __init__(self, root, cpf):
         super().__init__(root, "Listagem de Empréstimos")
         self.janela.focus_set()
-        self.emprestimo_controller = EmprestimoController()
+        self.emprestimo_controller = EmprestimoController(EmprestimoPadraoStrategy())
         self.text_area = None
         self.cpf = cpf
 

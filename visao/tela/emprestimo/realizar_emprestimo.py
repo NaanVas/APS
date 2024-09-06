@@ -3,6 +3,8 @@ from tkinter import ttk
 from visao.tela.tela_padrao import TelaPadrao
 from visao.tela.emprestimo.emprestimo_iniciado import TelaEmprestimoIniciado
 from controle.emprestimo_controller import EmprestimoController
+from controle.Strategy.emprestimo_padrao_strategy import EmprestimoPadraoStrategy
+
 
 class TelaRealizarEmprestimo(TelaPadrao):
     def __init__(self, root, voltar_callback, cpf):
@@ -10,7 +12,7 @@ class TelaRealizarEmprestimo(TelaPadrao):
         self.janela.focus_set()
         self.voltar_callback = voltar_callback
         self.cpf = cpf
-        self.emprestimo_controller = EmprestimoController()
+        self.emprestimo_controller = EmprestimoController(EmprestimoPadraoStrategy())
 
         label_titulo = tk.Label(self.frame_central, text="Empréstimo de Livro", font=("Montserrat", 18, "bold"), fg="#893F04", bg="#E5E0D8")
         label_titulo.grid(row=0, column=0, columnspan=2, pady=20)

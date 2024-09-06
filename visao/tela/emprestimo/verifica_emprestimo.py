@@ -3,17 +3,18 @@ from tkinter import ttk
 from controle.emprestimo_controller import EmprestimoController
 from visao.tela.emprestimo.listar_emprestimos import TelaListarEmprestimos
 from visao.tela.tela_padrao import TelaPadrao
+from controle.Strategy.emprestimo_padrao_strategy import EmprestimoPadraoStrategy
+
 
 class TelaVerificarEmprestimo(TelaPadrao):
     def __init__(self, root, voltar_callback):
         super().__init__(root, "Verificar Empréstimo")
         self.janela.focus_set()
         self.voltar_callback = voltar_callback
-        self.emprestimo_controller = EmprestimoController()
+        self.emprestimo_controller = EmprestimoController(EmprestimoPadraoStrategy())
         self.janela_listar_aberta = None
 
 
-        # Configuração da tela
         label_titulo = tk.Label(self.frame_central, text="Verificar Empréstimo", font=("Montserrat", 18, "bold"), fg="#893F04", bg="#E5E0D8")
         label_titulo.grid(row=0, column=0, columnspan=2, pady=20)
 

@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from visao.tela.tela_padrao import TelaPadrao
 from controle.emprestimo_controller import EmprestimoController
+from controle.Strategy.emprestimo_padrao_strategy import EmprestimoPadraoStrategy
+from controle.Strategy.emprestimo_funcionario_strategy import EmprestimoFuncionarioStrategy
 
 class TelaRealizarDevolucao(TelaPadrao):
     def __init__(self, root, voltar_callback, cpf_funcionario):
@@ -9,7 +11,8 @@ class TelaRealizarDevolucao(TelaPadrao):
         self.janela.focus_set()
         self.voltar_callback = voltar_callback
         self.cpf_funcionario = cpf_funcionario
-        self.emprestimo_controller = EmprestimoController()
+
+        self.emprestimo_controller = EmprestimoController(EmprestimoPadraoStrategy())
 
         label_titulo = tk.Label(self.frame_central, text="Devolução de Livro", font=("Montserrat", 18, "bold"), fg="#893F04", bg="#E5E0D8")
         label_titulo.grid(row=0, column=0, columnspan=2, pady=20)
@@ -25,17 +28,31 @@ class TelaRealizarDevolucao(TelaPadrao):
         self.label_mensagem = tk.Label(self.frame_central, text="", font=("Montserrat", 8), fg="#893F04", bg="#E5E0D8")
         self.label_mensagem.grid(row=3, column=0, columnspan=2, pady=10)
 
+        self.strategy_var = tk.IntVar(value=0)
+        checkbox_strategy = tk.Checkbutton(
+            self.frame_central, 
+            text="Usar Estratégia de Funcionário", 
+            variable=self.strategy_var, 
+            font=("Montserrat", 10), 
+            fg="#893F04", 
+            bg="#E5E0D8",
+            command=self.alterar_estrategia
+        )
+        checkbox_strategy.grid(row=4, column=0, columnspan=2, pady=10)
+
         botao_realizar_devolucao = ttk.Button(self.frame_central, text="Realizar Devolução", style="Estilo.TButton", command=self.realizar_devolucao)
-        botao_realizar_devolucao.grid(row=4, column=0, pady=10)
+        botao_realizar_devolucao.grid(row=5, column=0, pady=10)
 
         botao_voltar = ttk.Button(self.frame_central, text="Voltar", style="Estilo.TButton", command=self.fechar_tela)
-        botao_voltar.grid(row=4, column=1, pady=10, padx=10, sticky="ew")
+        botao_voltar.grid(row=5, column=1, pady=10, padx=10, sticky="ew")
 
         self.janela.protocol("WM_DELETE_WINDOW", self.fechar_tela)
 
-    def fechar_tela(self):
-        self.janela.destroy()
-        self.voltar_callback()
+    def alterar_estrategia(self):
+        if self.strategy_var.get() == 1:
+            self.emprestimo_controller.set_strategy(EmprestimoFuncionarioStrategy())
+        else: 
+            self.emprestimo_controller.set_strategy(EmprestimoPadraoStrategy())
 
     def realizar_devolucao(self):
         cpf_usuario = self.entry_cpf_usuario.get()
@@ -57,3 +74,7 @@ class TelaRealizarDevolucao(TelaPadrao):
         self.label_mensagem.config(text=mensagem, fg="green")
         self.entry_cpf_usuario.delete(0, tk.END)
         self.entry_titulo_livro.delete(0, tk.END)
+
+    def fechar_tela(self):
+        self.janela.destroy()
+        self.voltar_callback()
